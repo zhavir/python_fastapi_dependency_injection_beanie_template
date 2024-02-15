@@ -1,0 +1,79 @@
+[tool.poetry]
+name = "ToDO List"
+version = "1.0.0"
+description = "Todo list implementation with fastapi, beanie and dependencies injector"
+authors = ["Andrea Aramini, INI-MBM-BNC (EXT) <zhavir@outlook.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.103.1"
+pydantic = "^2.4.2"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+pydantic-settings = "^2.0.3"
+dependency-injector = "^4.41.0"
+structlog = "^24.1.0"
+beanie = "^1.22.6"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.2"
+pre-commit = "^3.4.0"
+pytest-asyncio = "^0.21.1"
+pre-commit-hooks = "^4.4.0"
+mypy = "^1.5.1"
+pytest-mypy = "^0.10.3"
+httpx = "^0.25.0"
+pytest-env = "^1.0.1"
+mongomock-motor = "^0.0.21"
+pytest-mock = "^3.11.1"
+pytest-freezegun = "^0.4.2"
+asgi-lifespan = "^2.1.0"
+ruff = "^0.1.5"
+pytest-cov = "^4.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+plugins = ["pydantic.mypy"]
+ignore_missing_imports = true
+strict = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+addopts = ["--mypy", "--cov=src"]
+filterwarnings = ["ignore::DeprecationWarning"]
+env = [
+  "TZ = /usr/share/zoneinfo/Europe/Amsterdam"
+]
+
+
+[tool.ruff]
+line-length = 120
+
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "W191", # indentation contains tabs
+]
+
+[tool.ruff.isort]
+known-third-party = ["fastapi", "pydantic", "starlette", "uvicorn", "beanie", "asyncssh", "aiokafka", "fastapi_pagination", "pydantic_settings", "dependency_injector", "structlog", "mongomock_motor", "pytest", "pytest_asyncio", "pytest_mock", "pytest_freezegun", "pytest_env", "asgi_lifespan", "ruff"]
+
+[tool.ruff.pycodestyle]
+max-line-length = 120
