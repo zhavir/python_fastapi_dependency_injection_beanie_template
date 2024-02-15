@@ -1,0 +1,39 @@
+services:
+  mongodb:
+    image: "mongo:7.0.5"
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: test
+    volumes:
+        - ./misc/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      production:
+        aliases: 
+          - mongodb
+
+  todo:
+    build:
+      target: production
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./src:/app/src"
+    environment:
+      UVICORN_RELOAD: true
+    networks:
+      - production
+    stdin_open: true
+    tty: true
+    depends_on:
+      - mongodb
+
+  tests:
+    build:
+      target: tests
+
+networks:
+  production:
+    driver: bridge
